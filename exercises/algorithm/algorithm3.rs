@@ -5,9 +5,37 @@
 */
 // I AM NOT DONE
 
-fn sort<T>(array: &mut [T]){
-	//TODO
+
+fn sort<T>(array: &mut [T])
+    where T:PartialOrd+Clone
+{
+    if let Some(_) =array.get(0){
+        let mut index =0usize;
+        
+        while index <array.len(){
+            let mut in_index= index;
+            let mut min_index =index;
+
+            while in_index<array.len(){
+                if array.get(in_index).unwrap()<array.get(min_index).unwrap(){
+                    min_index =in_index;
+                }
+                in_index+=1;
+            }
+
+            if min_index!=index {
+                let temp =array.get(index).unwrap().clone();
+                array[index] =array[min_index].clone();
+                array[min_index] =temp;
+            }
+
+            index+=1;
+        } 
+
+    }
+
 }
+
 #[cfg(test)]
 mod tests {
     use super::*;

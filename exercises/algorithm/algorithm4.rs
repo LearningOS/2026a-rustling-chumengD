@@ -6,6 +6,7 @@
 //I AM NOT DONE
 use std::cmp::Ordering;
 use std::fmt::Debug;
+use std::result;
 
 
 #[derive(Debug)]
@@ -50,13 +51,23 @@ where
 
     // Insert a value into the BST
     fn insert(&mut self, value: T) {
-        //TODO
+       match self.root.as_mut(){
+        Some(root) =>root.insert(value),
+        None => self.root =Some(Box::new(TreeNode::new(value)))
+       }
     }
 
     // Search for a value in the BST
     fn search(&self, value: T) -> bool {
-        //TODO
-        true
+        let mut cur =& self.root;
+       while let Some(node) =cur{
+            cur = match value.cmp(&node.value){
+                Ordering::Less  => &node.left,
+                Ordering::Greater  => &node.right,
+                Ordering::Equal  => return true,
+            }
+       }
+        false
     }
 }
 
@@ -66,7 +77,16 @@ where
 {
     // Insert a node into the tree
     fn insert(&mut self, value: T) {
-        //TODO
+            let cur = match value.cmp(&self.value){
+                Ordering::Less  => &mut self.left,
+                Ordering::Greater  => &mut self.right,
+                Ordering::Equal  => return,
+            };
+            match cur{
+                Some(node) =>node.insert(value),
+                None => *cur =Some(Box::new(TreeNode::new(value)))
+            }
+       
     }
 }
 

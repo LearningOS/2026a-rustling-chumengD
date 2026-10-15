@@ -6,6 +6,7 @@
 
 use std::cmp::Ord;
 use std::default::Default;
+use std::hint::select_unpredictable;
 
 pub struct Heap<T>
 where
@@ -38,6 +39,8 @@ where
 
     pub fn add(&mut self, value: T) {
         //TODO
+        self.items.push(value);
+        self.count+=1;
     }
 
     fn parent_idx(&self, idx: usize) -> usize {
@@ -45,7 +48,7 @@ where
     }
 
     fn children_present(&self, idx: usize) -> bool {
-        self.left_child_idx(idx) <= self.count
+        self.left_childchildren_present_idx(idx) <= self.count
     }
 
     fn left_child_idx(&self, idx: usize) -> usize {
@@ -58,7 +61,26 @@ where
 
     fn smallest_child_idx(&self, idx: usize) -> usize {
         //TODO
-		0
+        let left_idx =self.left_child_idx(idx);
+        let right_idx =&left_idx+1;
+        
+        let left  =  self.items.get(left_idx);
+        let right  =  self.items.get(right_idx);
+
+        let res = match left{
+            Some(&left) =>{
+                if let Some(&right_) = right{
+                    if left>right_ {left_idx} else {right_idx}
+                }else{
+                    left_idx
+                }
+            }
+            None =>{
+                0
+            }
+        };
+
+		res
     }
 }
 

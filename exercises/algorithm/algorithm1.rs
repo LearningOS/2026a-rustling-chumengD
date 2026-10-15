@@ -69,13 +69,50 @@ impl<T> LinkedList<T> {
             },
         }
     }
+
 	pub fn merge(list_a:LinkedList<T>,list_b:LinkedList<T>) -> Self
+    where
+        T:PartialOrd+Clone
 	{
-		//TODO
+        let mut new_list =LinkedList::<T>::new();
+
+        let mut ap =list_a.start;
+        let mut bp =list_b.start;
+        while ap.is_some() || bp.is_some(){
+            if ap.is_some() && bp.is_some(){
+                unsafe{
+                    let a_val =&(*ap.unwrap().as_ptr()).val;
+                    let b_val =&(*bp.unwrap().as_ptr()).val;
+                    if a_val>b_val {
+                        new_list.add(b_val.clone());
+                        bp = (*bp.unwrap().as_ptr()).next;
+                        }
+                    else {
+                        new_list.add(a_val.clone());
+                        ap =(*ap.unwrap().as_ptr()).next;
+                    } 
+                }
+            }
+            else if ap.is_some(){
+                unsafe{
+                    new_list.add((*ap.unwrap().as_ptr()).val.clone());
+                     ap =(*ap.unwrap().as_ptr()).next;
+                }
+            }
+            else {
+                unsafe{
+                    new_list.add((*bp.unwrap().as_ptr()).val.clone());
+                    bp =(*bp.unwrap().as_ptr()).next;
+                }
+            }
+        }
+           
+
+
 		Self {
-            length: 0,
-            start: None,
-            end: None,
+            length: new_list.length,
+            start: new_list.start,
+            end: new_list.end,
         }
 	}
 }
